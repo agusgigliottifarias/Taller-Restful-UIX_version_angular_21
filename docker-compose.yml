@@ -3,7 +3,7 @@ version: '3.8'
 services:
 
   database:
-    image: postgres:alpine
+    image: postgres:17-alpine
     container_name: database
     restart: always
     ports:
@@ -41,10 +41,10 @@ services:
     container_name: frontend
     ### --- SEGUIR INSTRUCIVO AQUI ####
     # -- Comentar luego de ng new
-    working_dir: /home/node 
+    #working_dir: /home/node 
     # -- Descomentar luego de ng new
-    # working_dir: /home/node/cli
-    # command: ng serve --host=0.0.0.0
+    working_dir: /home/node/cli
+    command: ng serve --host=0.0.0.0
     ### ------------------------- ####
     restart: always
     ports:
