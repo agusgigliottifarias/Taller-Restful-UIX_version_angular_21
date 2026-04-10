@@ -1,5 +1,5 @@
-import { CommonModule, Location,UpperCasePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { CommonModule, Location, UpperCasePipe } from '@angular/common';
+import { Component, ChangeDetectorRef } from '@angular/core'; 
 import { FormsModule } from '@angular/forms';
 import { Play } from './play';
 import { ActivatedRoute } from '@angular/router';
@@ -7,76 +7,75 @@ import { PlayService } from './play.services';
 
 @Component({
   selector: 'app-plays-detail',
-  imports: [UpperCasePipe, FormsModule,CommonModule],
+  standalone: true,
+  imports: [UpperCasePipe, FormsModule, CommonModule],
   template: ` 
     <div *ngIf="play">
       <h2>{{ play.name | uppercase }}</h2>
-      <form #form = 'ngForm'>
+      <form #form='ngForm'>
         <div class="form-group">
-          <label form="name">Nombre:</label>
+          <label for="name">Nombre:</label>
           <input name="name" placeholder="Nombre" class="form-control" [(ngModel)]="play.name" required #name="ngModel">
-          <div *ngIf= "name.invalid && (name.dirty || name.touched)" class="alert">
-            <div *ngIf= "name.errors?.['required']">
-              El nombre de la obra es requerido
-            </div>
-          </div>
         </div>
         <div class="form-group">
-          <label form="code">Codigo:</label>
+          <label for="code">Codigo:</label>
           <input name="code" placeholder="Codigo" class="form-control" [(ngModel)]="play.code">
         </div>
         <div class="form-group">
-          <label form="type">Tipo:</label>
-          <select name="type" placeholder="Tipo" class="form-control" [(ngModel)]="play.type">
-            <option value="comdey">Comedia</option>
-            <option value="tragedy">Tregedia</option>
-            <option value="musical">Musical</option>
-            <option value="drama">Drama</option>
-            <option value="space">Espacial</option>
-            <option value="horror">Horror</option>
-            <option value="futuristic">Futurista</option>
+          <label for="type">Tipo:</label>
+          <select name="type" class="form-control" [(ngModel)]="play.type">
+            <option *ngFor = "let type of TYPES" [ngValue]="">{{type}}</option>
           </select>
         </div>
-        <button (click)="goBack()" class="btn btn-danger">Atras</button>
-        <button (click) ="save()" class="btn btn-success" [disabled]="form.invalid" >Guardar</button>
+        <br>
+        <button type="button" (click)="goBack()" class="btn btn-danger me-2">Atras</button>
+        <button type="button" (click)="save()" class="btn btn-success" [disabled]="form.invalid">Guardar</button>
       </form>
     </div>   
   `,
-  styles: ``,
 })
 export class PlaysDetailComponent {
-  play! : Play;
+  play!: Play;
+
+  TYPES = [
+    "Tragedia",
+    "Comedia",
+    "Futurista",
+    "Drama",
+  ]
+
+  constructor(
+    private route: ActivatedRoute,
+    private playservice: PlayService,
+    private location: Location,
+    private cdr: ChangeDetectorRef // para que cargun las obras
+  ){}
+
+  ngOnInit(): void { 
+    this.get(); 
+  }
   
- constructor(
-  private route:ActivatedRoute,
-  private playservice:PlayService,
-  private location: Location
- ){}
-
-  goBack(): void{
-      this.location.back()
-  } 
-
-  save(): void{
-      this.playservice.save(this.play).subscribe(play => { this.play = play; this.goBack();});
+  save(): void { 
+    this.playservice.save(this.play).subscribe((dataPackage) => {
+        this.play = <Play>dataPackage.data; 
+        this.goBack(); 
+    }); 
   }
 
-  get() : void{
-    const id = +this.route.snapshot.paramMap.get('id')!;
-    this.playservice.get(id).subscribe(play => this.play = play);
+  get(): void {
+    const code = this.route.snapshot.paramMap.get('code')!;
+    if(code === 'new'){
+      this.play = <Play>{type:''};
+    }else{
+      this.playservice.get(code).subscribe(dataPackage => {
+        this.play = <Play>dataPackage.data; 
+        this.cdr.detectChanges(); 
+      });
+    }
   }
 
-  ngOnInit(){
-    this.get();
+
+  goBack(): void { 
+    this.location.back(); 
   }
 }
-
-/* Videos 
-Introducción a Angular - Taller RESTful UIX  (Visto)
-Frontend - Lista y formulario de Obras - Taller RESTful UIX (Visto)
-CRUD de Play - Taller Restful UIX
-Frontend - Conectando con el backend - Taller RESTful UIX
-Frontend - Guardar Obra, Modal, Paginación - Taller Restful UIX
-CRUD de Customer - Taller Restful UIX
-CRUD de Borderó - Taller Restful UIX
-*/

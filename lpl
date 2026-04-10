@@ -45,4 +45,11 @@ case "$1" in
     ;;
   * ) echo "Opción inválida."
       ;;
+  backendlog ) echo "Cargando logs del Backend..."
+    docker compose -f docker-compose.yml logs -f backend $2
+    ;;
+  frontendlog ) echo "Cargando logs del Frontend..."
+  docker compose -f docker-compose.yml logs -f frontend $2
+  ;;
+
 esac

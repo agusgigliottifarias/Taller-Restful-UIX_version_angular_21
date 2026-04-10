@@ -51,6 +51,3 @@ public class PlayService {
     }
 }
 
-
-/*
-CRUD de Play - Taller Restful UIX (13:10) */

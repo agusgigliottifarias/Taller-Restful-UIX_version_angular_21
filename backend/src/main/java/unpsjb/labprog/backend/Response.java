@@ -34,7 +34,6 @@ public class Response {
         return response(HttpStatus.NOT_FOUND, msj, null);
     }
 
-	/*hay que ver si esto se queda o no  */
 	public static ResponseEntity<Object> error(Object responseObj, String msj) {
     return response(HttpStatus.BAD_REQUEST, msj, responseObj);
 	}
