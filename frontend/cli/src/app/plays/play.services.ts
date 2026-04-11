@@ -38,6 +38,6 @@ export class PlayService {
   }
 
   search(searchTerm: string): Observable<DataPackage>{
-    return this.http.get<DataPackage>('${this.playsUrl}/search/${searchTerm}');
+    return this.http.get<DataPackage>(`${this.playsUrl}/search/${searchTerm}`);
   }
 }

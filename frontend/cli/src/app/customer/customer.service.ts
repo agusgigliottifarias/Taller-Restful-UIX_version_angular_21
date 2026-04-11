@@ -8,10 +8,10 @@ import { DataPackage } from "../data-package";
 })
 export class CustomerService{
 
-    private customerdUrl = "rest/Customers";
+    private customersUrl = "rest/customers";
     constructor (private htpClient: HttpClient){ }
 
     search (searchTerm: string): Observable<DataPackage>{
-        return this.htpClient.get<DataPackage>('$this.customersUrl}/search/${searchTerm}');
+        return this.htpClient.get<DataPackage>(`${this.customersUrl}/search/${searchTerm}`);
     }
 }

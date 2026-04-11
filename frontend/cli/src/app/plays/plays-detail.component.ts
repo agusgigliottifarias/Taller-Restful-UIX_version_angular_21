@@ -24,7 +24,7 @@ import { PlayService } from './play.services';
         <div class="form-group">
           <label for="type">Tipo:</label>
           <select name="type" class="form-control" [(ngModel)]="play.type">
-            <option *ngFor = "let type of TYPES" [ngValue]="">{{type}}</option>
+            <option *ngFor = "let type of TYPES" [ngValue]="type">{{type}}</option>
           </select>
         </div>
         <br>

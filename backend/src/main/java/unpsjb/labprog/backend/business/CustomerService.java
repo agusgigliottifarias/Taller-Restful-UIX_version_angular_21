@@ -11,9 +11,9 @@ import unpsjb.labprog.backend.model.Customer;
 public class CustomerService {
     
     @Autowired
-    CustomerRespository respository;
+    CustomerRepository repository;
 
     public List<Customer> search(String term){
-        return respository.search("%"+term+"%");
+        return repository.search("%"+term+"%");
     }
 }

@@ -13,7 +13,7 @@ import unpsjb.labprog.backend.business.CustomerService;
 
 
 @RestController
-@RequestMapping("customer")
+@RequestMapping("customers")
 public class CustomerPresenter {
     
     @Autowired

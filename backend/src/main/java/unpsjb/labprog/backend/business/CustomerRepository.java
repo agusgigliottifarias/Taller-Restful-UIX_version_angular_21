@@ -7,7 +7,7 @@ import org.springframework.data.repository.Repository;
 
 import unpsjb.labprog.backend.model.Customer;;
 
-public interface CustomerRespository extends Repository<Customer, Integer> {
+public interface CustomerRepository extends Repository<Customer, Integer> {
     
 
     @Query("select e from Customer e where e.name like ?1")

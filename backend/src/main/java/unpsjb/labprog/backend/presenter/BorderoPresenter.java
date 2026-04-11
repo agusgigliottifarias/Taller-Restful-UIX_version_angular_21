@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @RestController
-@RequestMapping("bordero")
+@RequestMapping("borderos")
 public class BorderoPresenter {
 
     @Autowired
