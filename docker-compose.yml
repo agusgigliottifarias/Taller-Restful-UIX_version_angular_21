@@ -2,75 +2,52 @@ version: '3.8'
 
 services:
 
-  database:
+  database_v_angular_21: 
     image: postgres:alpine
-    container_name: database
+    container_name: database_v_angular_21
     restart: always
     ports:
-      - "5432:5432"
+      - "5433:5432" # En tu PC usás el 5433
     volumes:
-      - postgres:/var/lib/postgresql
+      - postgres_v_angular_21:/var/lib/postgresql 
     environment:
       POSTGRES_USER: APP
       POSTGRES_PASSWORD: APP
       POSTGRES_DB: labprog
 
-  # 10.000km
-
-  backend:
+  backend_v_angular_21:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: backend
+    container_name: backend_v_angular_21
     volumes:
       - ./backend:/app
       - ../common/backend/m2:/root/.m2
     working_dir: /app
     command: sh run.sh
     ports:
-      - 8080:8080
-      - 35729:35729
-      - 5005:5005
+      - "8081:8080" # API en http://localhost:8081
+      - "35730:35729"
+      - "5006:5005"
     depends_on:
-      - database
+      - database_v_angular_21
 
-  frontend:
+  frontend_v_angular_21:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: frontend
-    ### --- SEGUIR INSTRUCIVO AQUI ####
-    # -- Comentar luego de ng new
-    #working_dir: /home/node 
-    # -- Descomentar luego de ng new
+    container_name: frontend_v_angular_21
     working_dir: /home/node/cli
     command: ng serve --host=0.0.0.0
-    ### ------------------------- ####
     restart: always
     ports:
-      - "4200:4200"
-    # stdin_open y tty mantienen el servidor funcionando sin commandos en ejecución
+      - "4201:4200" # Web en http://localhost:4201
     stdin_open: true
     tty: true
     volumes:
       - ./frontend:/home/node      
-    # Activar lo siguiente luego del taller End-to-end
-    # depends_on: 
-      # - backend
-
-  testing:
-    image: node:alpine
-    container_name: testing
-    profiles:
-      - test
-    working_dir: /home/node
-    volumes:
-      - ./testing:/home/node
-      - ../common/testing/node_modules:/home/node/node_modules      
-    command: npm test
-    # comentar esto
-    # depends_on:
-    #   - backend
+    depends_on: 
+      - backend_v_angular_21
 
 volumes:
-  postgres:
+  postgres_v_angular_21:
